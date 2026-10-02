@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -16,7 +16,11 @@ export class Login {
     password = '';
     errorMessage = '';
 
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+        private cdr: ChangeDetectorRef
+    ) {}
 
     onSubmit(): void {
         this.errorMessage = '';
@@ -26,8 +30,9 @@ export class Login {
                 localStorage.setItem('token', response.token);
                 this.router.navigate(['/home']);
             },
-            error: (err) => {
+            error: (err: any) => {
                 this.errorMessage = err.error?.message || 'Login failed. Please try again.';
+                this.cdr.detectChanges();
             }
         });
     }
