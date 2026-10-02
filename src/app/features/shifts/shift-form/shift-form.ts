@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { Navbar } from '../../../shared/components/navbar/navbar';
 
 @Component({
-  imports: [],
-  selector: 'app-shift-form',
-  styleUrl: './shift-form.css',
-  templateUrl: './shift-form.html',
+    selector: 'app-shift-form',
+    imports: [Navbar],
+    styleUrl: './shift-form.css',
+    templateUrl: './shift-form.html'
 })
 export class ShiftForm {}

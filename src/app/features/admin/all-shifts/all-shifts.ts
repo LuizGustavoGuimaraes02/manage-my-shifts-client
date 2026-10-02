@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { Navbar } from '../../../shared/components/navbar/navbar';
 
 @Component({
-  imports: [],
-  selector: 'app-all-shifts',
-  styleUrl: './all-shifts.css',
-  templateUrl: './all-shifts.html',
+    selector: 'app-all-shifts',
+    imports: [Navbar],
+    styleUrl: './all-shifts.css',
+    templateUrl: './all-shifts.html'
 })
 export class AllShifts {}
