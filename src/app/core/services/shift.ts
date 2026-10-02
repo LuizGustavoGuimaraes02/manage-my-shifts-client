@@ -7,17 +7,21 @@ import { AuthService } from './auth.service';
 export interface Shift {
     _id: string;
     userId: string;
+    name: string;
     start: string;
     end: string;
     perHour: number;
     place: string;
+    comments: string;
 }
 
 export interface ShiftPayload {
+    name: string;
     start: string;
     end: string;
     perHour: number;
     place: string;
+    comments?: string;
 }
 
 @Injectable({

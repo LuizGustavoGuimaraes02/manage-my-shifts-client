@@ -15,6 +15,7 @@ export const routes: Routes = [
     { path: 'home', component: Home, canActivate: [authGuard] },
     { path: 'my-shifts', component: MyShifts, canActivate: [authGuard] },
     { path: 'shifts/new', component: ShiftForm, canActivate: [authGuard] },
+    { path: 'shifts/:id/edit', component: ShiftForm, canActivate: [authGuard] },
     { path: 'profile', component: Profile, canActivate: [authGuard] },
     { path: 'admin/shifts', component: AllShifts, canActivate: [authGuard] },
     { path: 'admin/workers', component: AllWorkers, canActivate: [authGuard] },

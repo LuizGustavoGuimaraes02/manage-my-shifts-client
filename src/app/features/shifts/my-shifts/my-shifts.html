@@ -39,20 +39,32 @@
         @if (shifts.length === 0) {
             <p class="status-message">You do not have any shifts yet.</p>
         } @else {
-            <section class="shift-list">
-                @for (shift of shifts; track shift._id) {
-                    <article class="shift-card">
-                        <div>
-                            <h2>{{ shift.place }}</h2>
-                            <p>{{ shift.start | date:'medium' }} - {{ shift.end | date:'medium' }}</p>
-                        </div>
-
-                        <div class="shift-details">
-                            <span>{{ shift.perHour | currency:'CAD' }}/hour</span>
-                        </div>
-                    </article>
-                }
-            </section>
+            <div class="table-wrapper">
+                <table class="shifts-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Beginning time</th>
+                            <th>End time</th>
+                            <th>Price per hour</th>
+                            <th>Shift place</th>
+                            <th>Total profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (shift of shifts; track shift._id) {
+                            <tr class="clickable-row" [routerLink]="['/shifts', shift._id, 'edit']">
+                                <td>{{ shift.start | date:'mediumDate' }}</td>
+                                <td>{{ shift.start | date:'shortTime' }}</td>
+                                <td>{{ shift.end | date:'shortTime' }}</td>
+                                <td>{{ shift.perHour | currency:'CAD' }}</td>
+                                <td>{{ shift.place }}</td>
+                                <td>{{ getShiftProfit(shift) | currency:'CAD' }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
     }
 </main>
