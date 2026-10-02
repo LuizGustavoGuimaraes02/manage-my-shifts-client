@@ -36,8 +36,34 @@
             </article>
         </section>
 
+        <section class="filters">
+            <label>
+                Place
+                <select [(ngModel)]="selectedPlace">
+                    <option value="">All places</option>
+                    @for (place of places; track place) {
+                        <option [value]="place">{{ place }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>
+                From
+                <input type="date" [(ngModel)]="fromDate">
+            </label>
+
+            <label>
+                To
+                <input type="date" [(ngModel)]="toDate">
+            </label>
+
+            <button type="button" (click)="clearFilters()">Clear filters</button>
+        </section>
+
         @if (shifts.length === 0) {
             <p class="status-message">You do not have any shifts yet.</p>
+        } @else if (filteredShifts.length === 0) {
+            <p class="status-message">No shifts match your filters.</p>
         } @else {
             <div class="table-wrapper">
                 <table class="shifts-table">
@@ -52,7 +78,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (shift of shifts; track shift._id) {
+                        @for (shift of filteredShifts; track shift._id) {
                             <tr class="clickable-row" [routerLink]="['/shifts', shift._id, 'edit']">
                                 <td>{{ shift.start | date:'mediumDate' }}</td>
                                 <td>{{ shift.start | date:'shortTime' }}</td>

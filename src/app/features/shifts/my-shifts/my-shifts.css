@@ -123,6 +123,21 @@
     background-color: #f3f4f6;
 }
 
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.filters label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+}
+
 @media (max-width: 700px) {
     .page-header {
         align-items: flex-start;
