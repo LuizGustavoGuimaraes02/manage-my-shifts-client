@@ -1,6 +1,92 @@
 <app-navbar></app-navbar>
 
 <main class="page-container">
-    <h1>Add Shift</h1>
-    <p>The shift form will be built here.</p>
+    <section class="page-header">
+        <h1>{{ isEditMode ? 'Edit Shift' : 'Add Shift' }}</h1>
+    </section>
+
+    @if (isLoading) {
+        <p class="status-message">Loading shift...</p>
+    } @else {
+        <form class="shift-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <label>
+                Shift name
+                <input type="text" formControlName="name">
+                @if (isInvalid('name')) {
+                    <span class="field-error">Shift name is required.</span>
+                }
+            </label>
+
+            <label>
+                Date
+                <input type="date" formControlName="date">
+                @if (isInvalid('date')) {
+                    <span class="field-error">Enter a valid date (year 2000 or later).</span>
+                }
+            </label>
+
+            <div class="time-row">
+                <label>
+                    Start time
+                    <input type="time" formControlName="startTime">
+                    @if (isInvalid('startTime')) {
+                        <span class="field-error">Start time is required.</span>
+                    }
+                </label>
+
+                <label>
+                    End time
+                    <input type="time" formControlName="endTime">
+                    @if (isInvalid('endTime')) {
+                        <span class="field-error">End time is required.</span>
+                    }
+                </label>
+            </div>
+
+            @if (form.hasError('endBeforeStart') && form.controls.endTime.touched) {
+                <span class="field-error">End time must be after start time.</span>
+            }
+
+            <label>
+                Hourly wage
+                <input type="number" min="0" step="0.01" formControlName="perHour">
+                @if (isInvalid('perHour')) {
+                    <span class="field-error">Hourly wage must be 0 or more.</span>
+                }
+            </label>
+
+            <label>
+                Workplace
+                <input type="text" formControlName="place" list="places-list">
+                <datalist id="places-list">
+                    @for (place of places; track place) {
+                        <option [value]="place"></option>
+                    }
+                </datalist>
+                @if (isInvalid('place')) {
+                    <span class="field-error">Workplace is required.</span>
+                }
+            </label>
+
+            <label>
+                Comments
+                <textarea rows="3" formControlName="comments"></textarea>
+            </label>
+
+            @if (errorMessage) {
+                <p class="error-message">{{ errorMessage }}</p>
+            }
+
+            <div class="form-actions">
+                <button type="submit" [disabled]="isSaving">
+                    @if (isSaving) {
+                        <span class="spinner"></span> Saving...
+                    } @else {
+                        Save
+                    }
+                </button>
+                <a routerLink="/my-shifts">Cancel</a>
+            </div>
+        </form>
+    }
 </main>
