@@ -1,6 +1,58 @@
 <app-navbar></app-navbar>
 
 <main class="page-container">
-    <h1>My Shifts</h1>
-    <p>Your shifts will appear here.</p>
+    <section class="page-header">
+        <div>
+            <h1>My Shifts</h1>
+            <p>Review your shifts, hours, and estimated earnings.</p>
+        </div>
+
+        <a class="primary-link" routerLink="/shifts/new">Add Shift</a>
+    </section>
+
+    @if (isLoading) {
+        <p class="status-message">Loading your shifts...</p>
+    }
+
+    @if (errorMessage) {
+        <p class="error-message">{{ errorMessage }}</p>
+    }
+
+    @if (!isLoading && !errorMessage) {
+        <section class="stats-grid">
+            <article class="stat-card">
+                <span>Total shifts</span>
+                <strong>{{ totalShifts }}</strong>
+            </article>
+
+            <article class="stat-card">
+                <span>Total hours</span>
+                <strong>{{ totalHours | number:'1.1-1' }}</strong>
+            </article>
+
+            <article class="stat-card">
+                <span>Estimated earnings</span>
+                <strong>{{ totalEarnings | currency:'CAD' }}</strong>
+            </article>
+        </section>
+
+        @if (shifts.length === 0) {
+            <p class="status-message">You do not have any shifts yet.</p>
+        } @else {
+            <section class="shift-list">
+                @for (shift of shifts; track shift._id) {
+                    <article class="shift-card">
+                        <div>
+                            <h2>{{ shift.place }}</h2>
+                            <p>{{ shift.start | date:'medium' }} - {{ shift.end | date:'medium' }}</p>
+                        </div>
+
+                        <div class="shift-details">
+                            <span>{{ shift.perHour | currency:'CAD' }}/hour</span>
+                        </div>
+                    </article>
+                }
+            </section>
+        }
+    }
 </main>
