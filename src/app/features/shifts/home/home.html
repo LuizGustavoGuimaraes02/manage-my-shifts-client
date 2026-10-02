@@ -1,2 +1,15 @@
-<h1>My Shifts</h1>
-<p>Welcome! You are logged in.</p>
+<app-navbar></app-navbar>
+
+<main class="home-container">
+    @if (isAdmin) {
+        <section class="welcome-section">
+            <h1>Administrator Dashboard</h1>
+            <p>Welcome! From here you will manage workers, shifts, and system data.</p>
+        </section>
+    } @else {
+        <section class="welcome-section">
+            <h1>My Shifts</h1>
+            <p>Welcome! From here you will view, create, and manage your own shifts.</p>
+        </section>
+    }
+</main>

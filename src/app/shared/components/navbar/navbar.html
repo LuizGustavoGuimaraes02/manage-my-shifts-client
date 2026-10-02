@@ -1,0 +1,18 @@
+<nav class="navbar">
+    <a class="brand" routerLink="/home">Manage My Shifts</a>
+
+    <div class="nav-links">
+        <a routerLink="/home">Home</a>
+
+        @if (isAdmin) {
+            <a routerLink="/admin/shifts">All Shifts</a>
+            <a routerLink="/admin/workers">All Workers</a>
+        } @else {
+            <a routerLink="/my-shifts">My Shifts</a>
+            <a routerLink="/shifts/new">Add Shift</a>
+            <a routerLink="/profile">Profile</a>
+        }
+
+        <button type="button" (click)="logout()">Logout</button>
+    </div>
+</nav>

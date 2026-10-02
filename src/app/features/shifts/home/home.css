@@ -1,0 +1,21 @@
+.home-container {
+    margin: 0 auto;
+    max-width: 1100px;
+    padding: 40px 24px;
+}
+
+.welcome-section {
+    background-color: #f5f7fb;
+    border-radius: 8px;
+    padding: 32px;
+}
+
+.welcome-section h1 {
+    color: #050290;
+    margin-bottom: 12px;
+}
+
+.welcome-section p {
+    color: #333;
+    font-size: 18px;
+}

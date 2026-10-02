@@ -19,6 +19,11 @@ interface LoginResponse {
     token: string;
 }
 
+interface CurrentUser {
+    id: string;
+    permission: 'admin' | 'regular_user';
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -42,6 +47,22 @@ export class AuthService {
 
     getToken(): string | null {
         return localStorage.getItem(this.tokenKey);
+    }
+
+    getCurrentUser(): CurrentUser | null {
+        const token = this.getToken();
+
+        if (!token) {
+            return null;
+        }
+
+        const payload = token.split('.')[1];
+        const decodedPayload = JSON.parse(atob(payload));
+
+        return {
+            id: decodedPayload.id,
+            permission: decodedPayload.permission
+        };
     }
 
     isLoggedIn(): boolean {
