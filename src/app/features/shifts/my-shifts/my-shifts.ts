@@ -4,8 +4,7 @@ import { RouterLink } from '@angular/router';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Navbar } from '../../../shared/components/navbar/navbar';
 import { Shift, ShiftService } from '../../../core/services/shift';
-
-const MILLISECONDS_PER_HOUR = 1000 * 60 * 60;
+import { calculateShiftHours, calculateShiftProfit } from '../../../core/utils/shift-calculations';
 
 @Component({
     selector: 'app-my-shifts',
@@ -56,15 +55,8 @@ export class MyShifts implements OnInit {
         this.toDate = '';
     }
 
-    getShiftHours(shift: Shift): number {
-        const start = new Date(shift.start);
-        const end = new Date(shift.end);
-
-        return (end.getTime() - start.getTime()) / MILLISECONDS_PER_HOUR;
-    }
-
     getShiftProfit(shift: Shift): number {
-        return this.getShiftHours(shift) * shift.perHour;
+        return calculateShiftProfit(shift);
     }
 
     get places(): string[] {
@@ -82,11 +74,11 @@ export class MyShifts implements OnInit {
     }
 
     get totalHours(): number {
-        return this.filteredShifts.reduce((total, shift) => total + this.getShiftHours(shift), 0);
+        return this.filteredShifts.reduce((total, shift) => total + calculateShiftHours(shift), 0);
     }
 
     get totalEarnings(): number {
-        return this.filteredShifts.reduce((total, shift) => total + this.getShiftProfit(shift), 0);
+        return this.filteredShifts.reduce((total, shift) => total + calculateShiftProfit(shift), 0);
     }
 
     private matchesPlace(shift: Shift): boolean {
