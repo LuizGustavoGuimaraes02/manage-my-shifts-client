@@ -24,6 +24,7 @@ interface LoginResponse {
 })
 export class AuthService {
     private apiUrl = `${environment.apiUrl}/user`;
+    private tokenKey = 'token';
 
     constructor(private http: HttpClient) {}
 
@@ -33,5 +34,21 @@ export class AuthService {
 
     login(data: LoginPayload): Observable<LoginResponse> {
         return this.http.post<LoginResponse>(`${this.apiUrl}/login`, data);
+    }
+
+    saveToken(token: string): void {
+        localStorage.setItem(this.tokenKey, token);
+    }
+
+    getToken(): string | null {
+        return localStorage.getItem(this.tokenKey);
+    }
+
+    isLoggedIn(): boolean {
+        return this.getToken() !== null;
+    }
+
+    logout(): void {
+        localStorage.removeItem(this.tokenKey);
     }
 }

@@ -27,7 +27,7 @@ export class Login {
 
         this.authService.login({ email: this.email, password: this.password }).subscribe({
             next: (response) => {
-                localStorage.setItem('token', response.token);
+                this.authService.saveToken(response.token);
                 this.router.navigate(['/home']);
             },
             error: (err: any) => {
