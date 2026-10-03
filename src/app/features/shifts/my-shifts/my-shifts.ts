@@ -5,6 +5,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Navbar } from '../../../shared/components/navbar/navbar';
 import { Shift, ShiftService } from '../../../core/services/shift';
 import { calculateShiftHours, calculateShiftProfit } from '../../../core/utils/shift-calculations';
+import { getUniquePlaces, matchesDateRange, matchesPlace } from '../../../core/utils/shift-filters';
 
 @Component({
     selector: 'app-my-shifts',
@@ -60,12 +61,14 @@ export class MyShifts implements OnInit {
     }
 
     get places(): string[] {
-        return [...new Set(this.shifts.map((shift) => shift.place))].sort();
+        return getUniquePlaces(this.shifts);
     }
 
     get filteredShifts(): Shift[] {
         return this.shifts.filter(
-            (shift) => this.matchesPlace(shift) && this.matchesDateRange(shift)
+            (shift) =>
+                matchesPlace(shift, this.selectedPlace) &&
+                matchesDateRange(shift, this.fromDate, this.toDate)
         );
     }
 
@@ -79,23 +82,5 @@ export class MyShifts implements OnInit {
 
     get totalEarnings(): number {
         return this.filteredShifts.reduce((total, shift) => total + calculateShiftProfit(shift), 0);
-    }
-
-    private matchesPlace(shift: Shift): boolean {
-        return !this.selectedPlace || shift.place === this.selectedPlace;
-    }
-
-    private matchesDateRange(shift: Shift): boolean {
-        const shiftStart = new Date(shift.start);
-
-        if (this.fromDate && shiftStart < new Date(`${this.fromDate}T00:00:00`)) {
-            return false;
-        }
-
-        if (this.toDate && shiftStart > new Date(`${this.toDate}T23:59:59.999`)) {
-            return false;
-        }
-
-        return true;
     }
 }
