@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -17,6 +17,7 @@ export class Register {
     confirmPassword = '';
     firstName = '';
     lastName = '';
+    birthDate = '';
 
     errors: string[] = [];
 
@@ -25,6 +26,22 @@ export class Register {
         private router: Router,
         private cdr: ChangeDetectorRef
     ) {}
+
+    private calculateAge(birthDate: string): number {
+        const today = new Date();
+        const dateOfBirth = new Date(birthDate);
+        let age = today.getFullYear() - dateOfBirth.getFullYear();
+        const monthDifference = today.getMonth() - dateOfBirth.getMonth();
+
+        if (
+            monthDifference < 0 ||
+            (monthDifference === 0 && today.getDate() < dateOfBirth.getDate())
+        ) {
+            age--;
+        }
+
+        return age;
+    }
 
     private validate(): string[] {
         const foundErrors: string[] = [];
@@ -50,6 +67,16 @@ export class Register {
             foundErrors.push('Last name must contain at least 2 characters.');
         }
 
+        if (!this.birthDate) {
+            foundErrors.push('Birth date is required.');
+        } else {
+            const age = this.calculateAge(this.birthDate);
+
+            if (Number.isNaN(age) || age < 6 || age > 130) {
+                foundErrors.push('Age must be between 6 and 130 years old.');
+            }
+        }
+
         return foundErrors;
     }
 
@@ -64,10 +91,11 @@ export class Register {
             email: this.email,
             password: this.password,
             firstName: this.firstName,
-            lastName: this.lastName
+            lastName: this.lastName,
+            birthDate: this.birthDate
         }).subscribe({
             next: () => {
-                this.router.navigate(['/login']);
+                this.router.navigate(['/home']);
             },
             error: (err: any) => {
                 this.errors = [err.error?.message || 'Registration failed. Please try again.'];

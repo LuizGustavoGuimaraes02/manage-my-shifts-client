@@ -8,6 +8,7 @@ interface RegisterPayload {
     password: string;
     firstName: string;
     lastName: string;
+    birthDate: string;
 }
 
 interface LoginPayload {
