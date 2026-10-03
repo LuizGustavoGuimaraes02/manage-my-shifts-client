@@ -4,7 +4,7 @@ import { AllShifts } from './features/admin/all-shifts/all-shifts';
 import { AllWorkers } from './features/admin/all-workers/all-workers';
 import { Login } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
-import { Profile } from './features/profile/profile/profile';
+import { Profile } from './features/profile/profile';
 import { Home } from './features/shifts/home/home';
 import { MyShifts } from './features/shifts/my-shifts/my-shifts';
 import { ShiftForm } from './features/shifts/shift-form/shift-form';

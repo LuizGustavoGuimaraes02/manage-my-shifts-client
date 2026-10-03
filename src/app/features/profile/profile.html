@@ -1,0 +1,66 @@
+<section class="profile-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Profile</p>
+      <h1>My Profile</h1>
+    </div>
+
+    <button type="button" class="secondary-button" (click)="goHome()">Back Home</button>
+  </header>
+
+  <p *ngIf="isLoading" class="state-message">Loading profile...</p>
+
+  <form *ngIf="!isLoading" class="profile-form" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <label for="firstName">First name</label>
+      <input id="firstName" type="text" formControlName="firstName" />
+      <small *ngIf="profileForm.controls.firstName.touched && profileForm.controls.firstName.invalid">
+        First name must have at least 2 characters.
+      </small>
+    </div>
+
+    <div class="form-row">
+      <label for="lastName">Last name</label>
+      <input id="lastName" type="text" formControlName="lastName" />
+      <small *ngIf="profileForm.controls.lastName.touched && profileForm.controls.lastName.invalid">
+        Last name must have at least 2 characters.
+      </small>
+    </div>
+
+    <div class="form-row">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" />
+      <small *ngIf="profileForm.controls.email.touched && profileForm.controls.email.invalid">
+        Enter a valid email.
+      </small>
+    </div>
+
+    <div class="form-row">
+      <label for="birthDate">Birth date</label>
+      <input id="birthDate" type="date" formControlName="birthDate" />
+      <small *ngIf="profileForm.controls.birthDate.touched && profileForm.controls.birthDate.invalid">
+        Birth date is required.
+      </small>
+    </div>
+
+    <div class="form-row">
+      <label for="password">New password</label>
+      <input id="password" type="password" formControlName="password" />
+      <small *ngIf="profileForm.controls.password.touched && profileForm.controls.password.invalid">
+        Password must have at least 6 characters.
+      </small>
+    </div>
+
+    <div class="form-row">
+      <label for="confirmPassword">Confirm new password</label>
+      <input id="confirmPassword" type="password" formControlName="confirmPassword" />
+    </div>
+
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+    <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+
+    <button type="submit" class="primary-button" [disabled]="isSaving">
+      {{ isSaving ? 'Saving...' : 'Save Changes' }}
+    </button>
+  </form>
+</section>
