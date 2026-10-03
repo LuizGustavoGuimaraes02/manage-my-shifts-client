@@ -3,12 +3,12 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { Shift, ShiftService } from '../../../core/services/shift';
 import { calculateShiftProfit } from '../../../core/utils/shift-calculations';
+import {
+    getHighestEarningMonth,
+    getThisWeekPastShifts,
+    MonthEarnings
+} from '../../../core/utils/shift-statistics';
 import { Navbar } from '../../../shared/components/navbar/navbar';
-
-interface MonthEarnings {
-    month: Date;
-    total: number;
-}
 
 @Component({
     selector: 'app-home',
@@ -52,43 +52,11 @@ export class Home implements OnInit {
     }
 
     get thisWeekPastShifts(): Shift[] {
-        const now = new Date();
-        const weekStart = this.getStartOfWeek(now);
-
-        return this.shifts
-            .filter((shift) => new Date(shift.start) >= weekStart && new Date(shift.end) <= now)
-            .sort((a, b) => new Date(b.start).getTime() - new Date(a.start).getTime());
+        return getThisWeekPastShifts(this.shifts);
     }
 
     get highestEarningMonth(): MonthEarnings | null {
-        const now = new Date();
-        const totalsByMonth = new Map<string, MonthEarnings>();
-
-        for (const shift of this.shifts) {
-            if (new Date(shift.end) > now) {
-                continue;
-            }
-
-            const start = new Date(shift.start);
-            const key = `${start.getFullYear()}-${start.getMonth()}`;
-            const entry = totalsByMonth.get(key) ?? {
-                month: new Date(start.getFullYear(), start.getMonth(), 1),
-                total: 0
-            };
-
-            entry.total += calculateShiftProfit(shift);
-            totalsByMonth.set(key, entry);
-        }
-
-        let best: MonthEarnings | null = null;
-
-        for (const entry of totalsByMonth.values()) {
-            if (best === null || entry.total > best.total) {
-                best = entry;
-            }
-        }
-
-        return best;
+        return getHighestEarningMonth(this.shifts);
     }
 
     getShiftProfit(shift: Shift): number {
@@ -112,14 +80,5 @@ export class Home implements OnInit {
                 this.cdr.detectChanges();
             }
         });
-    }
-
-    private getStartOfWeek(date: Date): Date {
-        const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        const daysSinceMonday = (start.getDay() + 6) % 7;
-
-        start.setDate(start.getDate() - daysSinceMonday);
-
-        return start;
     }
 }
