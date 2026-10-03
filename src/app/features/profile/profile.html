@@ -1,14 +1,16 @@
+<app-navbar></app-navbar>
 <section class="profile-page">
   <header class="page-header">
     <div>
-      <p class="eyebrow">Profile</p>
-      <h1>My Profile</h1>
+      <p class="eyebrow">{{ isEditingOtherUser ? 'Worker' : 'Profile' }}</p>
+      <h1>{{ isEditingOtherUser ? 'Worker Profile' : 'My Profile' }}</h1>
     </div>
 
-    <button type="button" class="secondary-button" (click)="goHome()">Back Home</button>
+    <button type="button" class="secondary-button" (click)="goBack()">
+            {{ isSaving ? 'Saving...' : 'Update' }}
+    </button>
   </header>
 
-  <p *ngIf="isLoading" class="state-message">Loading profile...</p>
 
   <form *ngIf="!isLoading" class="profile-form" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
     <div class="form-row">
@@ -57,10 +59,19 @@
     </div>
 
     <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-    <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
 
-    <button type="submit" class="primary-button" [disabled]="isSaving">
-      {{ isSaving ? 'Saving...' : 'Save Changes' }}
+        <button type="submit" class="primary-button" [disabled]="isSaving || isDeleting">
+      {{ isSaving ? 'Saving...' : 'Update' }}
+    </button>
+
+    <button
+      *ngIf="canDelete"
+      type="button"
+      class="danger-button"
+      [disabled]="isSaving || isDeleting"
+      (click)="deleteWorker()"
+    >
+      {{ isDeleting ? 'Deleting...' : 'Delete Worker' }}
     </button>
   </form>
 </section>

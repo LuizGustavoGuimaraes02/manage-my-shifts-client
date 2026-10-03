@@ -1,6 +1,45 @@
 <app-navbar></app-navbar>
 
 <main class="page-container">
-    <h1>All Workers</h1>
-    <p>Administrator worker management will appear here.</p>
+    <section class="page-header">
+        <h1>All Workers</h1>
+        <p>Select a worker to edit their profile.</p>
+    </section>
+
+    @if (isLoading) {
+        <p class="status-message">Loading workers...</p>
+    }
+
+    @if (errorMessage) {
+        <p class="error-message">{{ errorMessage }}</p>
+    }
+
+    @if (!isLoading && !errorMessage) {
+        @if (workers.length === 0) {
+            <p class="status-message">There are no workers yet.</p>
+        } @else {
+            <div class="table-wrapper">
+                <table class="workers-table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Birth date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (worker of workers; track worker._id) {
+                            <tr class="clickable-row" [routerLink]="['/admin/workers', worker._id]">
+                                <td>{{ worker.email }}</td>
+                                <td>{{ worker.firstName }}</td>
+                                <td>{{ worker.lastName }}</td>
+                                <td>{{ worker.birthDate | date:'mediumDate':'UTC' }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
 </main>

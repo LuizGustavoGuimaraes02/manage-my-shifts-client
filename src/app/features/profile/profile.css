@@ -112,6 +112,23 @@ small {
   background: #e5e7eb;
 }
 
+.danger-button {
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: #ffffff;
+  background: #9c2113;
+}
+
+.danger-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
 @media (max-width: 640px) {
   .profile-page {
     padding: 24px 14px;
@@ -131,7 +148,9 @@ small {
   }
 
   .primary-button,
-  .secondary-button {
+  .secondary-button,
+  .danger-button {
     width: 100%;
   }
+
 }

@@ -1,0 +1,58 @@
+.page-container {
+    margin: 0 auto;
+    max-width: 1100px;
+    padding: 40px 24px;
+}
+
+.page-header {
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    color: #050290;
+    margin-bottom: 8px;
+}
+
+.page-header p {
+    color: #444;
+    margin: 0;
+}
+
+.status-message {
+    background-color: #f5f7fb;
+    border-radius: 8px;
+    color: #444;
+    padding: 20px;
+}
+
+.error-message {
+    background-color: #fdecea;
+    border-radius: 8px;
+    color: #9c2113;
+    padding: 20px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.workers-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.workers-table th,
+.workers-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    white-space: nowrap;
+}
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row:hover {
+    background-color: #f3f4f6;
+}

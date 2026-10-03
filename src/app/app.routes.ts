@@ -19,5 +19,6 @@ export const routes: Routes = [
     { path: 'profile', component: Profile, canActivate: [authGuard] },
     { path: 'admin/shifts', component: AllShifts, canActivate: [authGuard] },
     { path: 'admin/workers', component: AllWorkers, canActivate: [authGuard] },
+    { path: 'admin/workers/:id', component: Profile, canActivate: [authGuard] },
     { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

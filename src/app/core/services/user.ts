@@ -54,4 +54,10 @@ export class UserService {
       headers: this.getAuthHeaders()
     });
   }
+
+    deleteUser(id: string): Observable<unknown> {
+    return this.http.delete(`${this.apiUrl}/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }
