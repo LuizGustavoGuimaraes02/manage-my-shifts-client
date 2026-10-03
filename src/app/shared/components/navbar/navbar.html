@@ -16,8 +16,12 @@
             <a routerLink="/profile">Profile</a>
         }
 
-        @if (firstName) {
-            <span class="greeting">Hello - {{ firstName }}</span>
+                @if (firstName) {
+            @if (isAdmin) {
+                <a class="greeting" routerLink="/profile">Hello - {{ firstName }}</a>
+            } @else {
+                <span class="greeting">Hello - {{ firstName }}</span>
+            }
         }
 
         <button type="button" (click)="logout()">Logout</button>

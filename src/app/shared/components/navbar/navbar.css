@@ -56,6 +56,11 @@
     white-space: nowrap;
 }
 
+.nav-links a.greeting {
+    color: #e0e7ff;
+    font-weight: 700;
+}
+
 .nav-links button {
     background-color: #9c2113;
     border: none;
