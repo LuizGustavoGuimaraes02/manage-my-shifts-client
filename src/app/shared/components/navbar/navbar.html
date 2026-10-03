@@ -1,5 +1,8 @@
 <nav class="navbar">
-    <a class="brand" routerLink="/home">Manage My Shifts</a>
+    <a class="brand" routerLink="/home">
+        <span class="brand-logo">MS</span>
+        <span>Manage My Shifts</span>
+    </a>
 
     <div class="nav-links">
         <a routerLink="/home">Home</a>
@@ -11,6 +14,10 @@
             <a routerLink="/my-shifts">My Shifts</a>
             <a routerLink="/shifts/new">Add Shift</a>
             <a routerLink="/profile">Profile</a>
+        }
+
+        @if (firstName) {
+            <span class="greeting">Hello - {{ firstName }}</span>
         }
 
         <button type="button" (click)="logout()">Logout</button>

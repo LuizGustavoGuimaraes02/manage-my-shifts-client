@@ -3,21 +3,41 @@
     background-color: #050290;
     color: white;
     display: flex;
+    gap: 20px;
     justify-content: space-between;
-    padding: 16px 32px;
+    padding: 14px 32px;
 }
 
 .brand {
+    align-items: center;
     color: white;
+    display: flex;
+    flex-shrink: 0;
     font-size: 20px;
     font-weight: 700;
+    gap: 10px;
     text-decoration: none;
+}
+
+.brand-logo {
+    align-items: center;
+    background: #ffffff;
+    border-radius: 6px;
+    color: #050290;
+    display: flex;
+    font-size: 14px;
+    font-weight: 800;
+    height: 36px;
+    justify-content: center;
+    width: 36px;
 }
 
 .nav-links {
     align-items: center;
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: flex-end;
 }
 
 .nav-links a {
@@ -28,6 +48,12 @@
 
 .nav-links a:hover {
     text-decoration: underline;
+}
+
+.greeting {
+    color: #e0e7ff;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
 .nav-links button {
@@ -42,4 +68,16 @@
 
 .nav-links button:hover {
     opacity: 0.9;
+}
+
+@media (max-width: 760px) {
+    .navbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 18px;
+    }
+
+    .nav-links {
+        justify-content: flex-start;
+    }
 }

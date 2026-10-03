@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { UserService } from '../../../core/services/user';
 
 @Component({
     selector: 'app-navbar',
@@ -9,10 +10,14 @@ import { AuthService } from '../../../core/services/auth.service';
     styleUrl: './navbar.css',
     templateUrl: './navbar.html'
 })
-export class Navbar {
+export class Navbar implements OnInit {
+    firstName = '';
+
     constructor(
         private authService: AuthService,
-        private router: Router
+        private userService: UserService,
+        private router: Router,
+        private cdr: ChangeDetectorRef
     ) {}
 
     get currentUser() {
@@ -21,6 +26,25 @@ export class Navbar {
 
     get isAdmin(): boolean {
         return this.currentUser?.permission === 'admin';
+    }
+
+    ngOnInit(): void {
+        const userId = this.currentUser?.id;
+
+        if (!userId) {
+            return;
+        }
+
+        this.userService.getUserById(userId).subscribe({
+            next: (user) => {
+                this.firstName = user.firstName;
+                this.cdr.detectChanges();
+            },
+            error: () => {
+                this.firstName = '';
+                this.cdr.detectChanges();
+            }
+        });
     }
 
     logout(): void {
