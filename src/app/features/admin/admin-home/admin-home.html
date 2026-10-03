@@ -1,0 +1,51 @@
+<section class="welcome-section">
+    <h1>Administrator Dashboard</h1>
+    <p>Welcome! From here you will manage workers, shifts, and system data.</p>
+</section>
+
+@if (isLoading) {
+    <p class="status-message">Loading dashboard...</p>
+}
+
+@if (errorMessage) {
+    <p class="error-message">{{ errorMessage }}</p>
+}
+
+@if (!isLoading && !errorMessage) {
+    <section class="stats-section">
+        <article class="stat-panel">
+            <h2>Worker of the month</h2>
+            @if (workerOfTheMonth; as worker) {
+                <p class="stat-main">{{ worker.name }}</p>
+                <p>{{ worker.count }} shifts in {{ currentMonth | date:'MMMM y' }}</p>
+            } @else {
+                <p class="status-message">No shifts this month yet.</p>
+            }
+        </article>
+
+        <article class="stat-panel">
+            <h2>This week's past shifts</h2>
+            @if (thisWeekPastShifts.length === 0) {
+                <p class="status-message">No past shifts this week.</p>
+            } @else {
+                <ul class="week-list">
+                    @for (shift of thisWeekPastShifts; track shift._id) {
+                        <li>
+                            <span>{{ shift.start | date:'EEE, MMM d' }} - {{ getWorkerName(shift) }} - {{ shift.name }} ({{ shift.place }})</span>                            <strong>{{ getShiftProfit(shift) | currency:'CAD' }}</strong>
+                        </li>
+                    }
+                </ul>
+            }
+        </article>
+
+        <article class="stat-panel stat-panel-wide">
+            <h2>Highest-earning month (all workers)</h2>
+            @if (highestEarningMonth; as best) {
+                <p class="stat-main">{{ best.month | date:'MMMM y' }}</p>
+                <p>{{ best.total | currency:'CAD' }}</p>
+            } @else {
+                <p class="status-message">No completed shifts yet.</p>
+            }
+        </article>
+    </section>
+}

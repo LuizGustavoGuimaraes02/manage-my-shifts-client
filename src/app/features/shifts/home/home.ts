@@ -3,6 +3,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/auth.service';
 import { Shift, ShiftService } from '../../../core/services/shift';
 import { calculateShiftProfit } from '../../../core/utils/shift-calculations';
+import { AdminHome } from '../../admin/admin-home/admin-home';
+
 import {
     getHighestEarningMonth,
     getThisWeekPastShifts,
@@ -12,7 +14,7 @@ import { Navbar } from '../../../shared/components/navbar/navbar';
 
 @Component({
     selector: 'app-home',
-    imports: [CommonModule, Navbar],
+    imports: [CommonModule, Navbar, AdminHome],
     styleUrl: './home.css',
     templateUrl: './home.html'
 })

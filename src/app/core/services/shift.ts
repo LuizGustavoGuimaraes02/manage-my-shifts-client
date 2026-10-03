@@ -4,15 +4,32 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 
+export interface ShiftUser {
+    _id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+}
+
 export interface Shift {
     _id: string;
-    userId: string;
+    userId: string | ShiftUser;
     name: string;
     start: string;
     end: string;
     perHour: number;
     place: string;
     comments: string;
+}
+
+export function getShiftUserId(shift: Shift): string {
+    return typeof shift.userId === 'string' ? shift.userId : shift.userId._id;
+}
+
+export function getShiftWorkerName(shift: Shift): string {
+    return typeof shift.userId === 'string'
+        ? 'Unknown worker'
+        : `${shift.userId.firstName} ${shift.userId.lastName}`;
 }
 
 export interface ShiftPayload {

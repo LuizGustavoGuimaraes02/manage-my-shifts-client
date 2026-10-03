@@ -1,4 +1,4 @@
-import { Shift } from '../services/shift';
+import { getShiftUserId, Shift } from '../services/shift';
 import { calculateShiftProfit } from './shift-calculations';
 
 export interface MonthEarnings {
@@ -68,7 +68,9 @@ export function getWorkerOfTheMonth(shifts: Shift[], now: Date = new Date()): Wo
             continue;
         }
 
-        countsByUser.set(shift.userId, (countsByUser.get(shift.userId) ?? 0) + 1);
+        const userId = getShiftUserId(shift);
+
+        countsByUser.set(userId, (countsByUser.get(userId) ?? 0) + 1);
     }
 
     let best: WorkerShiftCount | null = null;

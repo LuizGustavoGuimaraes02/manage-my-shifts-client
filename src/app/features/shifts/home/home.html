@@ -1,11 +1,8 @@
 <app-navbar></app-navbar>
 
 <main class="home-container">
-    @if (isAdmin) {
-        <section class="welcome-section">
-            <h1>Administrator Dashboard</h1>
-            <p>Welcome! From here you will manage workers, shifts, and system data.</p>
-        </section>
+            @if (isAdmin) {
+        <app-admin-home></app-admin-home>
     } @else {
         <section class="welcome-section">
             <h1>My Shifts</h1>
