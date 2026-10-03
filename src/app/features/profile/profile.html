@@ -64,6 +64,16 @@
       {{ isSaving ? 'Saving...' : 'Update' }}
     </button>
 
+        <button
+      *ngIf="isEditingOtherUser"
+      type="button"
+      class="secondary-button"
+      [disabled]="isSaving || isDeleting"
+      (click)="viewWorkerShifts()"
+    >
+      Filter Shifts
+    </button>
+
     <button
       *ngIf="canDelete"
       type="button"

@@ -1,0 +1,81 @@
+<app-navbar></app-navbar>
+
+<main class="page-container">
+    <section class="page-header">
+        <div>
+            <h1>Shifts of {{ workerName }}</h1>
+            <p>Filter this worker's shifts by place and date.</p>
+        </div>
+
+        <a class="secondary-link" [routerLink]="['/admin/workers', workerId]">Back to Worker</a>
+    </section>
+
+    @if (isLoading) {
+        <p class="status-message">Loading shifts...</p>
+    }
+
+    @if (errorMessage) {
+        <p class="error-message">{{ errorMessage }}</p>
+    }
+
+    @if (!isLoading && !errorMessage) {
+        <section class="filters">
+            <label>
+                Place
+                <select [(ngModel)]="selectedPlace">
+                    <option value="">All places</option>
+                    @for (place of places; track place) {
+                        <option [value]="place">{{ place }}</option>
+                    }
+                </select>
+            </label>
+
+            <label>
+                From
+                <input type="date" [(ngModel)]="fromDate">
+            </label>
+
+            <label>
+                To
+                <input type="date" [(ngModel)]="toDate">
+            </label>
+
+            <button type="button" (click)="clearFilters()">Clear filters</button>
+        </section>
+
+        @if (shifts.length === 0) {
+            <p class="status-message">This worker does not have any shifts yet.</p>
+        } @else if (filteredShifts.length === 0) {
+            <p class="status-message">No shifts match your filters.</p>
+        } @else {
+            <div class="table-wrapper">
+                <table class="shifts-table">
+                    <thead>
+                        <tr>
+                            <th>Worker name</th>
+                            <th>Date</th>
+                            <th>Beginning time</th>
+                            <th>End time</th>
+                            <th>Price per hour</th>
+                            <th>Shift place</th>
+                            <th>Total profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (shift of filteredShifts; track shift._id) {
+                            <tr class="clickable-row" [routerLink]="['/shifts', shift._id, 'edit']">
+                                <td>{{ workerName }}</td>
+                                <td>{{ shift.start | date:'mediumDate' }}</td>
+                                <td>{{ shift.start | date:'shortTime' }}</td>
+                                <td>{{ shift.end | date:'shortTime' }}</td>
+                                <td>{{ shift.perHour | currency:'CAD' }}</td>
+                                <td>{{ shift.place }}</td>
+                                <td>{{ getShiftProfit(shift) | currency:'CAD' }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+</main>

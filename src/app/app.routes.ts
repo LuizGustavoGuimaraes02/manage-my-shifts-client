@@ -8,6 +8,7 @@ import { Profile } from './features/profile/profile';
 import { Home } from './features/shifts/home/home';
 import { MyShifts } from './features/shifts/my-shifts/my-shifts';
 import { ShiftForm } from './features/shifts/shift-form/shift-form';
+import { WorkerShifts } from './features/admin/worker-shifts/worker-shifts';
 
 export const routes: Routes = [
     { path: 'login', component: Login },
@@ -20,5 +21,6 @@ export const routes: Routes = [
     { path: 'admin/shifts', component: AllShifts, canActivate: [authGuard] },
     { path: 'admin/workers', component: AllWorkers, canActivate: [authGuard] },
     { path: 'admin/workers/:id', component: Profile, canActivate: [authGuard] },
+    { path: 'admin/workers/:id/shifts', component: WorkerShifts, canActivate: [authGuard] },
     { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];

@@ -147,6 +147,10 @@ export class Profile implements OnInit {
     });
   }
 
+  viewWorkerShifts(): void {
+    this.router.navigate(['/admin/workers', this.userId, 'shifts']);
+  }
+
   goBack(): void {
     this.router.navigate([this.isEditingOtherUser ? '/admin/workers' : '/home']);
   }
