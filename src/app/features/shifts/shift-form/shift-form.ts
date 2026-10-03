@@ -10,6 +10,7 @@ import {
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../../shared/components/navbar/navbar';
 import { ShiftPayload, ShiftService } from '../../../core/services/shift';
+import { AuthService } from '../../../core/services/auth.service';
 
 function endAfterStartValidator(group: AbstractControl): ValidationErrors | null {
     const startTime = group.get('startTime')?.value;
@@ -50,6 +51,7 @@ export class ShiftForm implements OnInit {
     private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
     private readonly cdr = inject(ChangeDetectorRef);
+    private readonly authService = inject(AuthService);
 
     readonly form = this.formBuilder.nonNullable.group(
         {
@@ -72,6 +74,14 @@ export class ShiftForm implements OnInit {
 
     get isEditMode(): boolean {
         return this.shiftId !== null;
+    }
+
+        get isAdmin(): boolean {
+        return this.authService.getCurrentUser()?.permission === 'admin';
+    }
+
+    get backRoute(): string {
+        return this.isAdmin ? '/admin/shifts' : '/my-shifts';
     }
 
     ngOnInit(): void {
@@ -106,7 +116,7 @@ export class ShiftForm implements OnInit {
 
         request$.subscribe({
             next: () => {
-                this.router.navigate(['/my-shifts']);
+                this.router.navigate([this.backRoute]);
             },
             error: (error: HttpErrorResponse) => {
                 this.errorMessage = error.error?.message ?? 'Could not save the shift.';
@@ -117,7 +127,11 @@ export class ShiftForm implements OnInit {
     }
 
     private loadPlaceSuggestions(): void {
-        this.shiftService.getMyShifts().subscribe({
+        const shifts$ = this.isAdmin
+            ? this.shiftService.getAllShifts()
+            : this.shiftService.getMyShifts();
+
+        shifts$.subscribe({
             next: (shifts) => {
                 this.places = [...new Set(shifts.map((shift) => shift.place))].sort();
                 this.cdr.detectChanges();
