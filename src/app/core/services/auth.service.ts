@@ -20,6 +20,11 @@ interface LoginResponse {
     token: string;
 }
 
+interface ResetPasswordPayload {
+    email: string;
+    password: string;
+}
+
 interface CurrentUser {
     id: string;
     permission: 'admin' | 'regular_user';
@@ -40,6 +45,10 @@ export class AuthService {
 
     login(data: LoginPayload): Observable<LoginResponse> {
         return this.http.post<LoginResponse>(`${this.apiUrl}/login`, data);
+    }
+
+    resetPassword(data: ResetPasswordPayload): Observable<{ message: string }> {
+        return this.http.post<{ message: string }>(`${this.apiUrl}/reset-password`, data);
     }
 
     saveToken(token: string): void {
@@ -66,8 +75,30 @@ export class AuthService {
         };
     }
 
-    isLoggedIn(): boolean {
-        return this.getToken() !== null;
+        isLoggedIn(): boolean {
+        const token = this.getToken();
+
+        if (token === null) {
+            return false;
+        }
+
+        if (this.isTokenExpired(token)) {
+            this.logout();
+            return false;
+        }
+
+        return true;
+    }
+
+    private isTokenExpired(token: string): boolean {
+        try {
+            const base64Payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+            const payload = JSON.parse(atob(base64Payload));
+
+            return typeof payload.exp === 'number' && payload.exp * 1000 <= Date.now();
+        } catch {
+            return true;
+        }
     }
 
     logout(): void {

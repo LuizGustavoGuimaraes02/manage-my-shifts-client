@@ -94,8 +94,16 @@ export class Register {
             lastName: this.lastName,
             birthDate: this.birthDate
         }).subscribe({
-            next: () => {
-                this.router.navigate(['/home']);
+                        next: () => {
+                this.authService.login({ email: this.email, password: this.password }).subscribe({
+                    next: (response) => {
+                        this.authService.saveToken(response.token);
+                        this.router.navigate(['/home']);
+                    },
+                    error: () => {
+                        this.router.navigate(['/login']);
+                    }
+                });
             },
             error: (err: any) => {
                 this.errors = [err.error?.message || 'Registration failed. Please try again.'];
