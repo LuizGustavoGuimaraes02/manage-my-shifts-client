@@ -90,9 +90,19 @@ export class Profile implements OnInit {
 
     const { firstName, lastName, email, birthDate, password, confirmPassword } = this.profileForm.value;
 
-    if (password && password !== confirmPassword) {
+        if (password && password !== confirmPassword) {
       this.errorMessage = 'Password confirmation does not match.';
       return;
+    }
+
+    if (password) {
+      const confirmed = window.confirm(
+        'Changing the password will permanently delete ALL data of this account, including its shifts. This cannot be undone. Do you want to continue?'
+      );
+
+      if (!confirmed) {
+        return;
+      }
     }
 
     const payload = {

@@ -129,6 +129,16 @@ small {
   opacity: 0.65;
 }
 
+.warning-message {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #f59e0b;
+  background: #fef3c7;
+  color: #92400e;
+  font-weight: 600;
+}
+
 @media (max-width: 640px) {
   .profile-page {
     padding: 24px 14px;
