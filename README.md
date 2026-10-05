@@ -1,59 +1,125 @@
-# ManageMyShiftsClient
+# Manage My Shifts - Client
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.0.
+Angular client for the **Full Stack Angular to Database (Client Side)** project. It connects to the Node.js / Express / MongoDB REST API from the **Full Stack API to Server** project.
 
-## Development server
+This submission implements **both modes** described in the specification, because the project was done solo:
 
-To start a local development server, run:
+- **Regular worker mode**
+- **Administrator mode**
 
-```bash
-ng serve
+## Tech stack
+
+- Angular 22 (standalone components, reactive and template-driven forms, `@if` / `@for` control flow)
+- TypeScript and RxJS
+- JWT authentication against the API
+- Plain CSS, responsive for desktop, tablet and phone screens
+
+## Requirements
+
+- Node.js and npm
+- The API running locally: repository `manage-my-shifts-api` (default `http://localhost:3000`)
+
+The API address is configured in `src/environments/environment.ts`:
+
+```ts
+export const environment = {
+    production: false,
+    apiUrl: 'http://localhost:3000/api'
+};
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Getting started
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1. Start the API first (see the API repository).
+2. Install the dependencies and start the client:
 
 ```bash
-ng generate --help
+npm install
+npm start
 ```
 
-## Building
+3. Open `http://localhost:4200/`.
 
-To build the project run:
+To create a production build:
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Roles and pages
 
-## Running unit tests
+After logging in, the navbar and the home page change according to the user permission stored in the JWT.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Pages shared by both modes
 
-```bash
-ng test
+| Route | Page |
+| --- | --- |
+| `/register` | Registration (email, password, confirmation, first name, last name, birth date) |
+| `/login` | Login |
+| `/forgot-password` | Password reset for users who forgot their password |
+
+### Regular worker mode
+
+| Route | Page |
+| --- | --- |
+| `/home` | Upcoming shift, this week's past shifts, highest-earning month |
+| `/my-shifts` | Table of own shifts with filters by place and date range; clicking a row opens the edit page |
+| `/shifts/new` | Add a shift (unique shift name, comments, saving indicator) |
+| `/shifts/:id/edit` | Edit a shift |
+| `/profile` | Edit own profile |
+
+### Administrator mode
+
+| Route | Page |
+| --- | --- |
+| `/home` | Worker of the month, this week's past shifts with worker name, highest-earning month (all workers) |
+| `/admin/shifts` | All shifts of all workers with filters by worker, place and date range |
+| `/admin/workers` | Table of all workers |
+| `/admin/workers/:id` | Worker profile editing with **Filter Shifts**, **Update** and **Delete Worker** |
+| `/admin/workers/:id/shifts` | Shifts of a single worker with filters by place and date range |
+| `/profile` | Own profile (reachable from the greeting in the navbar) |
+
+The navbar shows the logo, the links for the current role, a `Hello - FirstName` greeting and a logout button.
+
+## Account rules
+
+- **Login by email.** The specification talks about a username; this app uses the email as the username. It must be a valid email and the password must have at least 6 characters.
+- **Session.** The API token lasts 1 hour (the 60 minutes of the specification). When the token expires, the client clears it and sends the user back to the login page.
+- **After registration** the client logs the user in automatically and opens the home page.
+- **Changing or resetting a password deletes all data of the account** (its shifts and comments), as required by the specification. The profile page and the reset page show a warning and ask for confirmation before sending a new password. Editing a profile without typing a password keeps all data.
+- **Forgot password.** The login page links to `/forgot-password`: email, new password and confirmation. Administrator accounts cannot be reset this way.
+
+## Creating an administrator
+
+There is no admin sign-up screen. Every new user is created as a regular worker, and an administrator is a user whose permission was changed to `admin` directly in the database.
+
+## Project structure
+
+```txt
+src/app/
+  core/
+    guards/        authGuard (blocks pages when there is no valid token)
+    services/      AuthService, ShiftService, UserService
+    utils/         shift-calculations, shift-statistics, shift-filters
+  features/
+    auth/          login, register and forgot password pages
+    shifts/        home, my shifts, shift form (add and edit)
+    profile/       profile page (own profile or a worker, for admins)
+    admin/         admin home, all shifts, all workers, worker shifts
+  shared/
+    components/    navbar
 ```
 
-## Running end-to-end tests
+## Design notes
 
-For end-to-end (e2e) testing, run:
+- **Feature-based folders.** Each page lives in its own feature folder; services, guards and pure helpers live in `core`.
+- **Shared pure functions.** Hours, profit, weekly and monthly statistics and the place/date filters are plain functions in `core/utils`, reused by the worker pages and the admin pages instead of being copied.
+- **Reused components.** The same shift form handles adding and editing, for workers and admins. The same profile page edits the logged-in user or, with an `:id` in the route, any worker.
+- **Authorization.** The client hides links and buttons by role, but the API enforces permissions on every request.
+- **Populated shifts.** When the admin loads all shifts, the API returns the worker inside each shift, so the worker name needs no extra request.
+- **Change detection.** Every HTTP callback that changes component state calls `ChangeDetectorRef.detectChanges()` so the screen updates immediately.
 
-```bash
-ng e2e
-```
+## Known limitations
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- The workplace field is a text input with suggestions taken from existing shifts, not a fixed list.
+- Password reset has no email verification, as the specification describes it: anyone who knows the email of a regular worker can reset that account password. The reset deletes the account data and is refused for administrators, which limits the damage but does not remove the risk.
